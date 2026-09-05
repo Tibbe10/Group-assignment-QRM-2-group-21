@@ -105,12 +105,13 @@ Each week consists of 1, 2, or 3 subquestions. The total amount of points you ca
 ```{r}
 
 #WRITE YOUR CODE HERE
-
+summary(movies$revenue)
 ```
 
 **Your Answer:**
 
 Write your formulated response here.
+The mean revenue is approximately $82.73 million, while the median revenue is approximately $14.56 million. The minimum revenue is $0 and the maximum revenue is approximately $1.52 billion.
 
 *Step b*
 
