@@ -63,23 +63,29 @@ We encourage you to keep your code blocks, printing statements, and final answer
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+movies <- read.delim("movies4.tsv")
+nrow(movies)
+ncol(movies)
 ```
 
 **Your Answer:**
 
 Write your response here.
+
+The dataset contains 808 observations and 19 variables. There are 808 subjects. Each subject represents one movie.
 
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); continuous; (iv) discrete. If present, name one example of such a variable present in your data set. \textbf{[4 points]}
 
 ```{r answer 2}
 #WRITE YOUR CODE HERE
-
+str(movies)
 ```
 
 **Your Answer:**
 
 Write your response here.
+
+The dataset contains nominal, continuous, and discrete variables. An example of a nominal variable is "genre", since genres don't have a natural order. An example of continuous variable is "revenue". An example of a discrete variable is "vote_count", since the number of votes can only take whole-number values. There is no ordinal variable in the dataset.
 
 3. A movie studio wants to know which types of movies give maximal revenue. Perform the following steps to provide the movie studio with an analysis which corresponds to their request:
 
