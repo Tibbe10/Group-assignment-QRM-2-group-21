@@ -26,6 +26,8 @@ format:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
 ```
 
 # Introduction
@@ -116,32 +118,41 @@ The mean revenue is approximately $82.73 million, while the median revenue is ap
 *Step b*
 
 ```{r}
-
-#WRITE YOUR CODE HERE
-
+movies %>%
+  filter(revenue==max(revenue)) %>%
+  slice(1) %>%
+  select(title, revenue) 
+movies %>%
+  filter(revenue==min(revenue)) %>%
+  slice(1) %>%
+  select(title, revenue)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The movie with the highest revenue in the dataset is 'The Avengers' with a revenue of $1.519.557.910,00.  The movie with the lowest revenue is 'The Oogieloves in the Big Balloon Adventure' which had no revenue at all. 
 
 *Step c*
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+ggplot(movies,aes(x = revenue)) +
+  geom_histogram(bins=30) +
+  labs(title = "revenue distribution of movies",
+       x = "Revenue",
+       y = "number of movies" )
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+
 
 *Step d*
 
 ```{r}
 
-#WRITE YOUR CODE HERE
+
 
 ```
 
