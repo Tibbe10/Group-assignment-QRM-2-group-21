@@ -28,6 +28,8 @@ format:
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
+install.packages("moments")
+library(moments)
 ```
 
 # Introduction
@@ -130,7 +132,7 @@ movies %>%
 
 **Your Answer:**
 
-The movie with the highest revenue in the dataset is 'The Avengers' with a revenue of $1.519.557.910,00.  The movie with the lowest revenue is 'The Oogieloves in the Big Balloon Adventure' which had no revenue at all. 
+The movie with the highest revenue in the dataset is 'The Avengers' with a revenue of $1,519,557,910.00.  The movie with the lowest revenue is 'The Oogieloves in the Big Balloon Adventure' which had no revenue at all. 
 
 *Step c*
 
@@ -146,43 +148,46 @@ ggplot(movies,aes(x = revenue)) +
 
 **Your Answer:**
 
-
+The shape of the histogram is strongly right-skewed and only has a few outliers to the right. Which shows that most movies generated very little revenue or no revenue at all. The tail to the right represents the small number of movies that did generate a serious amount of revenue. In short, the histogram shows that making money in the movie industry is very difficult, but the few movies that did succeed were able to generate extremely high revenues. 
 
 *Step d*
 
 ```{r}
-
-
+movies <- mutate(movies, log_of_revenue = log(revenue))
+mean(movies$log_of_revenue)
 
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+The movies that have a revenue of zero all have a log revenue of minus infinity (-Inf). When the mean of the log value is calculated, the outcome will consequently also become minus infinity (-Inf).
 
 *Step e*
 
 ```{r}
-
-#WRITE YOUR CODE HERE
-
+movies$log_of_revenue[movies$log_of_revenue == -Inf] <- NA
+mean(movies$log_of_revenue, na.rm = TRUE)
+ggplot(movies,aes(x = log_of_revenue)) +
+  geom_histogram(bins=30) +
+  labs(title = "revenue distribution of movies",
+       x = "Log of revenue",
+       y = "number of movies" )
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+After replacing -Inf values with NA, the mean of log revenue becomes approximately 17.28. The shape of the histogram of log revenue is left skewed with a tail extending to the left.
 
 *Step f*
 
 ```{r}
-
-#WRITE YOUR CODE HERE
-
+skewness(movies$revenue, na.rm = TRUE)
+kurtosis(movies$revenue, na.rm = TRUE)
+skewness(movies$log_of_revenue, na.rm = TRUE)
+kurtosis(movies$log_of_revenue, na.rm = TRUE)
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+the skewness of the revenue is approximately 3.90 and therefore greater then 0, this would give a skewness to the right which is in line with the result of question c. The corresponding kurtosis is relatively high, with a value of approximately 22.37, this shows that the data contains some extreme values, which was also concluded in answer c. 
+the skewness of the log of revenue is negative, approximately -1.96 and therefore left skewed which is consistent with the result of question e. The corresponding kurtosis is also relatively high, although lower than without the log, with a value of approximately 10.95. This also shows the existence of some extreme values just as concluded in answer e.  
 
 # Week 2 
 1 Is your dataset movies4.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]}
