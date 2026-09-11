@@ -26,10 +26,7 @@ format:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(dplyr)
-library(ggplot2)
-install.packages("moments")
-library(moments)
+
 ```
 
 # Introduction
@@ -67,8 +64,11 @@ We encourage you to keep your code blocks, printing statements, and final answer
 
 ```{r}
 #WRITE YOUR CODE HERE
+library(dplyr)
+library(ggplot2)
+library(moments)
 movies <- read.delim("movies4.tsv")
-nrow(movies)
+nrow(movies) * ncol(movies)
 ncol(movies)
 ```
 
@@ -76,7 +76,7 @@ ncol(movies)
 
 Write your response here.
 
-The dataset contains 808 observations and 19 variables. There are 808 subjects. Each subject represents one movie.
+The dataset contains 808 observations and 19 variables. There are 15352 subjects. Each subject represents one movie.
 
 2. Which of the following types of variables are present in your data set? (i) nominal; (ii) ordinal; (iii); continuous; (iv) discrete. If present, name one example of such a variable present in your data set. \textbf{[4 points]}
 
@@ -230,8 +230,13 @@ Write your formulated response here.
 *Step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+sample_means <- numeric(100)
+for(i in 1:100) {
+  movies_sample <- movies[sample(1:nrow(movies), 25), ]
+  sample_means[i] <- mean(movies_sample$vote_average)
+}
+print(sample_means[1:10])
+  
 ```
 
 **Your Answer:**
