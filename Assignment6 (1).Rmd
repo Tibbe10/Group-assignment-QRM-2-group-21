@@ -327,22 +327,45 @@ Write your formulated response here.
 
 ```{r}
 #WRITE YOUR CODE HERE
+movies$revenue_millions <- movies$revenue / 1000000
+
+var(movies$revenue_millions[movies$director_gender == "male"], na.rm = TRUE)
+var(movies$revenue_millions[movies$director_gender == "female"], na.rm = TRUE)
 
 ```
 
 **Your Answer:**
 
 Write your formulated response here.
+After recoding revenue into millions of dollars, the variance of revenue for movies with a male director is approximately 31,137.62. For movies with a female director, the variance is approximately 13,224.54.
 
 *step d*
 ```{r}
 #WRITE YOUR CODE HERE
+male_var <- var(movies$revenue_millions[movies$director_gender == "male"], na.rm = TRUE)
+female_var <- var(movies$revenue_millions[movies$director_gender == "female"], na.rm = TRUE)
+
+n_female <- sum(movies$director_gender == "female", na.rm = TRUE)
+
+test_stat <- (n_female - 1) * female_var / male_var
+test_stat
+
+p_value <- 2 * min(
+  pchisq(test_stat, df = n_female - 1),
+  1 - pchisq(test_stat, df = n_female - 1)
+)
+p_value
 
 ```
 
 **Your Answer:**
 
 Write your formulated response here.
+We test the null hypothesis that the variance of revenue for movies with female directors is equal to the variance for movies with male directors. The alternative hypothesis is that the two variances are different. We use a significance level of 5%.
+
+The test statistic is 33.55 and follows a chi-square distribution with 79 degrees of freedom under the null hypothesis. The p-value is approximately 0.00000323.
+
+Since the p-value is smaller than 0.05, we reject the null hypothesis. We conclude that the variance of revenue for movies with female directors is significantly different from the variance for movies with male directors. The variance for movies with female directors is lower.
 
 3
 
