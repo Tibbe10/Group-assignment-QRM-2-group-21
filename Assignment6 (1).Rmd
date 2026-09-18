@@ -193,6 +193,7 @@ the skewness of the log of revenue is negative, approximately -1.96 and therefor
 1 Is your dataset movies4.tsv the full population, or is it a sample of a larger population? If the latter, how would you describe the full population? \textbf{[4 points]}
 
 *Your answer here:*
+The movies4.tsv dataset is a sample of a larger population, rather than the full population. It contains 808 movies, while the broader population consists of many more movies. The full population can therefore be described as all movies from the population from which these 808 movies were selected.
 
 Write your formulated response here.
 
@@ -213,6 +214,7 @@ mean(movies$vote_average, na.rm = TRUE)
 ```
 
 **Your Answer:**
+The mean of vote_average in the full dataset is approximately 6.039.
 
 Write your formulated response here.
 
@@ -225,6 +227,7 @@ mean(movies_sample$vote_average)
 ```
 
 **Your Answer:**
+The mean of vote_average in the random sample of 25 movies is 6.016. This is very close to the mean of the full dataset, which is approximately 6.039, although the sample mean is slightly lower.
 
 Write your formulated response here.
 
