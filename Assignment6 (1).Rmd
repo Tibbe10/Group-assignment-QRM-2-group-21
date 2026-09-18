@@ -208,7 +208,7 @@ e. Using the formulas of the *Central Limit Theorem*, give the distribution of t
 *Step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+mean(movies$vote_average, na.rm = TRUE)
 
 ```
 
@@ -219,8 +219,9 @@ Write your formulated response here.
 *Step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+set.seed(123)
+movies_sample <- movies[sample(nrow(movies), 25), ]
+mean(movies_sample$vote_average)
 ```
 
 **Your Answer:**
