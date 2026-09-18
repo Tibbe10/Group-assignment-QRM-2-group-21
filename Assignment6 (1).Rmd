@@ -314,13 +314,17 @@ table(movies$director_gender)
 *step b*
 
 ```{r}
-
-
+movies$genderdum<-NA
+movies$genderdum[movies$director_gender=="male"]<-1
+movies$genderdum[movies$director_gender=="female"]<-0
+binom.test(sum(movies$genderdum == 1, na.rm=TRUE), sum(!is.na(movies$genderdum)), p=0.5)
 ```
 
 **Your Answer:**
+Ho: p=0.5 , H1: p!=0.5 , a=0.05
+Based on our binomial test we found that ou of 765 trials 685 where successful, the corresponding p-value was 2.2e-16, which is lower then 0.05. Therefore the null hypothesis is rejected.
 
-Write your formulated response here.
+
 
 *step c*
 
