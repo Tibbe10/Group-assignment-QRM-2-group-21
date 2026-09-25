@@ -522,13 +522,20 @@ b. Using the insights from the scatterplot, your linear model, and your data, fi
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+ggplot(movies, aes(x = log_budget, y = log_revenue)) +
+geom_point() +
+  geom_smooth(method = "lm", se=FALSE, color = "red") +
+  labs(
+title  = "associaton log of budget and log of revenue ",
+x = "Log of budget", y = "Log of revenue"
+) +
+theme_minimal()
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The scatterplot that shows the log of budget and the log of revenue. With a straight line that shows the association between the two.
 
 *step b*
 
