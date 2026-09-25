@@ -421,79 +421,98 @@ g. Who do you think is correct? Bob or Chantal? What would you advise the movie 
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+model1 <- lm(revenue ~ budget, data = movies)
+summary(model1)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The estimated regression model is:
 
+Revenue = -11.63 million + 3.162 * Budget
+where both revenue and budget are measured in US dollars. 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+coef(model1)["budget"]
+  
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The estimated value of beta1 is approximately 3.162. This means that, on average a 1 US dollar increase in a movie's budget is associated with an increase of approximately 3.16 US dollars in revenue.
 
 *step c*
 
 ```{r}
 #WRITE YOUR CODE HERE
+beta1 <- coef(model1)["budget"]
+se_beta1 <- summary(model1)$coefficients["budget", "Std. Error"]
 
+t_stat <- (beta1 - 1) / se_beta1
+p_value <- pt(t_stat, df = df.residual(model1), lower.tail = FALSE)
+
+t_stat
+p_value
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The null hypothesis is that beta1 is less than or equal to 1, while the alternative hypothesis is that beta1 is greater than 1. The test statistic is approximately 23.75 and the p-value is approximately 3.28e-95. Since the p-value is far below 0.05, we reject the null hypothesis. There is strong evidence that beta1 is greater than 1.
 
 *step d*
 
 ```{r}
 #WRITE YOUR CODE HERE
+movies$log_revenue <- ifelse(movies$revenue == 0, NA, log(movies$revenue))
+movies$log_budget <- ifelse(movies$budget == 0, NA, log(movies$budget))
 
+model2 <- lm(log_revenue ~ log_budget, data = movies)
+summary(model2)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The estimated log-log regression model is:
+
+Log Revenue = -0.0459 + 1.030 * Log Budget
+
+Movies with a revenue or budget of zero were assigned NA before taking the logarithm. The full regression output is shown above.
 
 *step e*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+coef(model2)["log_budget"]
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+The estimated value of beta1 is approximately 1.030. Since this is a log-log model, beta1 can be interpreted as an elasticity. A 1% increase in a movie's budget is associated with an average increase of approximately 1.03% in revenue.
 
 *step f*
 
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+summary(model1)$r.squared
+summary(model2)$r.squared
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The level-level model has an R-squared of approximately 0.599, while the log-log model has an R-squared of approximately 0.495. However, these values are not directly comparable because the dependent variables differ and the models are estimated on different samples. Therefore, R-squared alone cannot determine which model has the better fit. The log-log model may still be preferable because it reduces the influence of extreme values and allows for a percentage interpretation.
 
 *step g*
 
 ```{r}
 #WRITE YOUR CODE HERE
-
+coef(model1)["budget"]
+coef(model2)["log_budget"]
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The results provide more support for Chantal's claim. In the level-level model, each additional dollar of budget is associated with approximately $3.16 of additional revenue, and this coefficient is significantly greater than 1. The log-log model shows a similar positive relationship: a 1% increase in budget is associated with approximately a 1.03% increase in revenue, although this elasticity is not significantly different from 1. However, these results show association rather than causality, and movie revenue does not directly represent studio profit because other costs and revenue sharing are not accounted for. Therefore, I would advise the studio not to simply focus on cheaper movies, but also not to increase budgets automatically.
 
 2
 
