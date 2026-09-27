@@ -278,16 +278,59 @@ According to the Central Limit Theorem, the distribution of the sample mean of v
 
 **Your Answer:**
 
-Write your formulated response here.
+A variable in this data set that would be likely to follow a discrete uniform distribution is release_day. Without looking at the data there is no reason movie studios would favor releasing movies on a particular day of the month. Therefore, each day from 1 to 31 should be equally likely to occur, which means it follows a discrete uniform distribution. 
+
+Expected mean: 
+mean = (1+31)/2=16
+
+Expected standard deviation:
+std. deviation = SQRT(((31-1+1)^2 -1)/12)= 8.94
 
 ```{r}
-#WRITE YOUR CODE HERE
+library(ggplot2)
+
+# Load the data
+df <- read.delim("movies4.tsv", sep = "\t", header = TRUE)
+
+# Theoretical values for Discrete Uniform(1, 31)
+n <- nrow(df)
+expected_count <- n * (1/31)
+
+theoretical_mean <- (1 + 31) / 2
+theoretical_sd <- sqrt(((31 - 1 + 1)^2 - 1) / 12)
+
+cat("Theoretical mean:", theoretical_mean, "\n")
+cat("Theoretical SD:", theoretical_sd, "\n")
+cat("Observed mean:", mean(df$release_day), "\n")
+cat("Observed SD:", sd(df$release_day), "\n")
+
+# Plot histogram
+ggplot(df, aes(x = release_day)) +
+  geom_histogram(binwidth = 1, boundary = 0.5, fill = "steelblue", color = "black") +
+  geom_hline(aes(yintercept = expected_count, linetype = "Expected count"), 
+             color = "red", linewidth = 1) +
+  scale_x_continuous(breaks = seq(1, 31, by = 2)) +
+  scale_linetype_manual(name = "", values = "dashed") +
+  labs(
+    title = "Histogram of Release Day vs. Expected Discrete Uniform(1,31)",
+    x = "Release day of month",
+    y = "Frequency"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "top")
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The data show a mean of 15.33 and a standard deviation of 8.56 which is pretty close to the expected mean of 16 and standard deviation of 8.94. This makes it look like release_day follows a discrete uniform distribution, but when you take a closer look 2 main things stand out:
+
+Day 1 and 25 stick out a lot. Day 1 is probably a regular default release date and day 25 lines up with christmas which is a big release period for movies. Studios are likely doing this on purpose to release films around these dates, so this isn't random.
+
+Also days 28 to 31 show up less often. This actually makes sense, because not every month has a 29th 30th or 31st. February usually stops at the 28th and a lot of other months don't have a 31st. So no matter what movie studios do these days never appear as often as the earlier days. 
+
+So overall, release_days looked like a very good candidate 
+for a discrete uniform distribution, but it turns out it isn't really uniform.
 
 # Week 3 
 
