@@ -250,19 +250,29 @@ Write your formulated response here.
 *Step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
+hist(sample_means,
+     main = "Histogram of Sample Means",
+     xlab = "Sample Mean",
+     ylab = "Frequency",
+     breaks = 20)
+mean(sample_means)
+sd(sample_means)
+```
+
+**Your Answer:**
+
+The sample means have a mean of 6.0452 and a standard deviation of 0.2207. The distribution is approximately normal as the histogram is bell-shaped around the center.
+
+*Step e*
+```{r}
+mean(vote_average)
+sd(vote_average)
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
-
-*Step e*
-
-**Your Answer:**
-
-Write your formulated response here.
+According to the Central Limit Theorem, the distribution of the sample mean of vote_average for samples of 25 movies is approximately normally distributed with an expected value of 6.0394 and a standard deviation of 0.2369. In the simulation, the mean was 6.0452 and the standard deviation was 0.2207.The distribution is approximately normal. There are only a few small differences to the clt values due to the random sampling.
 
 3. Is there a variable in your data set which you would expect to follow a discrete uniform distribution? Explain, without looking at the data, why you expect this data to be discrete uniform. If the data would indeed follow a discrete uniform distribution, what would you expect the mean and standard deviation of this variable to be? Next, plot a histogram of the variable, and plot an appropriate discrete uniform distribution on top of this histogram. Comment whether the variable indeed follows this expected distribution. If the distribution deviates from the discrete uniform distribution, explain why this is the case. \textbf{[6 points]}
 
@@ -379,18 +389,42 @@ c. If you look closely at the resulting plot in b.), you will probably see that 
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
+library(ggplot2)
+
+ggplot(movies, aes(x = release_year, y = revenue)) +
+  stat_summary(fun = mean, geom = "point") +
+  labs(
+    title = "Mean Revenue by Year",
+    x = "Year",
+    y = "Mean Revenue"
+  )
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The mean revenue does not appear to have increasing or decreasing trend over time. The revenue fluctuates year by year but based on the scatter plot we can't assume that years have a linear relationship with revenue.
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
+library(ggplot2)
+
+ggplot(movies, aes(x = release_year, y = revenue)) +
+  stat_summary(
+    fun = mean,
+    geom = "point"
+  ) +
+  stat_summary(
+    fun.data = mean_cl_normal,
+    geom = "errorbar",
+    width = 0.2
+  ) +
+  labs(
+    title = "Mean Revenue by Year with 95% Confidence Intervals",
+    x = "Year",
+    y = "Mean Revenue"
+  )
 
 ```
 
@@ -401,9 +435,23 @@ Write your formulated response here.
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
+library(dplyr)
+
+movies %>%
+  group_by(release_year) %>%
+  summarise(
+    n = n(),
+    mean_revenue = mean(revenue, na.rm = TRUE),
+    sd_revenue = sd(revenue, na.rm = TRUE)
+  )
 
 ```
+**Your Answer**
+There are two factors that can cause the confidence intervals to be wider in a given year:
+1. If the individual revenues of the movies in a year differ more, the standard error of the mean increases. This creates a wider interval.
+2. Fewer observations, a smaller sample size also increases the standard error.Therefore also creating a wider interval.
+We can verify this by calculating the number of observations and the standard deviation with the code above. If you compare these numbers with the with of the confidence intervals you can see that the years with smaller Number of observations and a larger standard deviation have wider intervals.
+
 
 # Week 4 
 
