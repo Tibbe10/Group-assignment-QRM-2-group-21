@@ -626,12 +626,20 @@ theme_minimal()
 
 **Your Answer:**
 
-The scatterplot that shows the log of budget and the log of revenue. With a straight line that shows the association between the two.
+The scatterplot shows the log of budget and the log of revenue. With a straight line that shows the association between the two.
 
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
+movies_check <- movies[!is.na(movies$log_revenue) & !is.na(movies$log_budget) &
+                       movies$budget > 0 & movies$revenue > 4, ]
+
+model2 <- lm(log_revenue ~ log_budget, data = movies_check)
+
+i <- which.max(residuals(model2))
+fitted(model2)[i]
+residuals(model2)[i]
+
 
 ```
 
