@@ -662,13 +662,14 @@ f. One executive at the studio wants to time the release of the movie to a speci
 *step a*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+table(movies$genre)
+freq_genre <- table(movies$genre)
+sort(freq_genre, decreasing = TRUE)[1:3]
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The three movie genre that occur the most are Drama, Comedy and Thriller.
 
 *step b*
 
