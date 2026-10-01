@@ -638,14 +638,14 @@ model2 <- lm(log_revenue ~ log_budget, data = movies_check)
 
 i <- which.max(residuals(model2))
 fitted(model2)[i]
+movies$log_of_revenue[627]
 residuals(model2)[i]
-
+movies$title[627]
 
 ```
 
 **Your Answer:**
-
-Write your formulated response here.
+A movie which highly over performed is The Full Monty. This movie has a log of revenue of 19.36789, a predicted log of revenue of 15.47378, and a residual of 3.894113.
 
 # Week 5
 
