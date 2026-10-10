@@ -674,7 +674,16 @@ The three movie genre that occur the most are Drama, Comedy and Thriller.
 *step b*
 
 ```{r}
-#WRITE YOUR CODE HERE
+library(tidyverse)
+freq_genre <- table(movies$genre)
+top_genres <- names(sort(freq_genre, decreasing = TRUE)[1:3])
+movies <- movies %>%
+  mutate(
+    genre2 = if_else(genre %in% top_genres, genre, "other"),
+    genre2 = as.factor(genre2)
+  )
+freq_table_genre2 <- table(movies$genre2)
+print(freq_table_genre2)
 
 ```
 
@@ -685,13 +694,28 @@ Write your formulated response here.
 *step c*
 
 ```{r}
-#WRITE YOUR CODE HERE
-
+library(tidyverse)
+movies_clean <- movies %>%
+  filter(revenue > 0, budget > 0) %>%
+  drop_na(revenue, budget, genre2, release_year)
+model <- lm(log(revenue) ~ log(budget) + genre2 + release_year, data = movies_clean)
+summary(model)
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Coefficient Interpretations Guide
+When you run summary(model), you will get coefficients that are interpreted as follows:
+	Intercept (β_0):
+	The expected value of log⁡("revenue" ) when log⁡("budget" )=0 (i.e., budget = 1), release year is 0 (or baseline depending on scaling), and the movie belongs to the reference category of genre2 (the omitted category in the dummy set).
+	log⁡("budget" ) Coefficient (β_1):
+	Since both revenue and budget are log-transformed (a log-log model), this coefficient represents an elasticity.
+	Interpretation: A 1% increase in a movie's budget is associated with an average β_1% change in its revenue, holding genre and release year constant.
+	genre2 Dummy Coefficients:
+	Each coefficient for a specific genre level represents the difference in expected log revenue between that genre and the baseline (reference) genre, holding budget and year constant.
+	Interpretation: Compared to the reference genre, movies in this specific genre have an expected log revenue that is higher (if positive) or lower (if negative) by β units, controlling for budget and year. (To convert log differences roughly to percentage differences for small coefficients, you can use 100×(exp⁡(β)-1)).
+	year Coefficient (β_y):
+	Interpretation: Holding budget and genre constant, an increase of one release year is associated with an average change of β_y units in the log of revenue per year (representing a temporal trend in box office earnings).
 
 *step d*
 
