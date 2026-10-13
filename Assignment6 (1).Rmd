@@ -4,7 +4,7 @@ subtitle: "Period 1, 2026"
 author: "Fill in your group number and names here"
 date:  "`r format(Sys.Date(), '%d-%m-%Y')`"
 output:
-  pdf_document:
+  word_document:
     number_sections: true
   html_document:
     df_print: paged
@@ -265,8 +265,8 @@ The sample means have a mean of 6.0452 and a standard deviation of 0.2207. The d
 
 *Step e*
 ```{r}
-mean(vote_average)
-sd(vote_average)
+mean(movies$vote_average)
+sd(movies$vote_average)
 
 ```
 
@@ -778,6 +778,8 @@ Yes, there is evidence of heteroskedasticity. The residuals are most dispersed f
 
 
 ```{r}
+library(sandwich)
+library(lmtest)
 movies_clean$month <- factor(movies_clean$release_month)   # January = baseline
 
 model_f <- lm(log(revenue) ~ log(budget) + genre2 + release_year + runtime + month,
