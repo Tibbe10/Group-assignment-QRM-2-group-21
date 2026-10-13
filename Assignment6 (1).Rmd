@@ -720,30 +720,88 @@ When you run summary(model), you will get coefficients that are interpreted as f
 *step d*
 
 ```{r}
-#WRITE YOUR CODE HERE
+model_d <- lm(log(revenue) ~ log(budget) + genre2 + release_year + runtime,
+              data = movies_clean)
+summary(model_d)
+
+new_movie <- data.frame(
+  budget       = 20000000,    # last zero treated as a typo
+  genre2       = factor("Drama", levels = levels(movies_clean$genre2)),
+  release_year = 2026,
+  runtime      = 120
+)
+
+pred_log <- predict(model_d, newdata = new_movie, interval = "prediction", level = 0.90)
+pred_log
+exp(pred_log)   # expected revenue: about $23.9M, 90% PI about $2.0M to $284.6M
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+The predicted revenue of the new movie is approximately $24 million. The 90% prediction interval is approximately $2 million to $285 million.
 
 *step e*
 
 ```{r}
-#WRITE YOUR CODE HERE
+movies_clean$resid  <- resid(model_d)
+movies_clean$fitted <- fitted(model_d)
+
+# Residuals vs the continuous variables (one panel each)
+movies_clean %>%
+  mutate(`log(budget)` = log(budget),
+         `Release year` = release_year,
+         `Runtime` = runtime,
+         `Fitted values` = fitted) %>%
+  select(resid, `log(budget)`, `Release year`, `Runtime`, `Fitted values`) %>%
+  pivot_longer(-resid, names_to = "variable", values_to = "x") %>%
+  ggplot(aes(x = x, y = resid)) +
+  geom_point(alpha = 0.4) +
+  geom_hline(yintercept = 0, color = "red") +
+  geom_smooth(se = FALSE, linewidth = 0.8) +
+  facet_wrap(~ variable, scales = "free_x") +
+  labs(x = NULL, y = "Residuals", title = "Residuals vs independent variables")
+
+# Residuals by genre2
+ggplot(movies_clean, aes(x = genre2, y = resid)) +
+  geom_boxplot() +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(x = "genre2", y = "Residuals", title = "Residuals by genre2")
 
 ```
 
 **Your Answer:**
 
-Write your formulated response here.
+Yes, there is evidence of heteroskedasticity. The residuals are most dispersed for low-budget movies and become less dispersed as the budget increases, while the plots against release year and runtime show no pattern.
 
 *step f*
 
 
 ```{r}
-#WRITE YOUR CODE HERE
+movies_clean$month <- factor(movies_clean$release_month)   # January = baseline
+
+model_f <- lm(log(revenue) ~ log(budget) + genre2 + release_year + runtime + month,
+              data = movies_clean)
+summary(model_f)
+
+# H0: all 11 month coefficients = 0
+anova(model_d, model_f)                                    # F about 2.08, p about 0.020
+
+# Same test, robust to heteroskedasticity
+waldtest(model_d, model_f, vcov = function(x) vcovHC(x, type = "HC3"), test = "F")   # F about 1.96, p about 0.031
+
+# Predicted median revenue of our movie by release month
+newdata_months <- data.frame(
+  budget       = 20000000,
+  genre2       = factor("Drama", levels = levels(movies_clean$genre2)),
+  release_year = 2026,
+  runtime      = 120,
+  month        = factor(1:12, levels = levels(movies_clean$month))
+)
+round(setNames(exp(predict(model_f, newdata = newdata_months)) / 1e6, month.abb), 1)
+# Jan 25.7, Feb 18.9, Mar 23.6, Apr 25.2, May 37.4, Jun 33.4, Jul 31.6, Aug 23.9, Sep 14.0, Oct 29.7, Nov 40.1, Dec 35.4
 
 ```
 
+*Your Answer:*
+The model from step d was extended with month dummies (January as baseline), and a joint F-test of H₀: all month coefficients equal zero was used. H₀ is rejected at the 5% level (classical p = 0.020, robust p = 0.031), so the month of release affects revenue. The advise to the studio would be to release the movie in May–June or November–December and to avoid September.
